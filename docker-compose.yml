@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  # ReactJS Service
+  monannonce-react:
+    container_name: "monannonce_react"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: 'npm run start'
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "8081:8081"
+    volumes:
+      - './:/home/app/:rw'
+    working_dir: '/home/app/monannonce_react/monannonce_react'
+
