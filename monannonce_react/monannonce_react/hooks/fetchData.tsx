@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { showMessage } from "react-native-flash-message";
 
 const endpoint = "http://localhost:3333"
@@ -16,17 +17,23 @@ export async function fetchData(path: string, method: string, body?: Object, use
         return fetch(endpoint + path, {
             method,
             headers,
-            ...(body ? {body: JSON.stringify(body)} : {}),
+            ...(body && method !== 'GET' ? {body: JSON.stringify(body)} : {}),
         })
         .then(response => {
+            if(response.status === 401 || response.status === 403) {
+                showMessage({
+                    message: 'Session expirée',
+                    type: 'danger',
+                    icon: 'danger',
+                });
+                router.push({ pathname: '/login' });
+            }
             return response.json()
         })
         .catch(error => {
-            // error = JSON.parse(error);
-            console.log(error.message);
             return showMessage({
                 message: 'Erreur',
-                description: error,
+                description: error.message,
                 type: 'danger',
                 icon: 'danger',
             });

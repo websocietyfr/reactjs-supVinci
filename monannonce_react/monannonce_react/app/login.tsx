@@ -1,11 +1,10 @@
-import { Link, router } from "expo-router";
-import { useContext, useState } from "react";
+import { router } from "expo-router";
+import { useContext } from "react";
 import { Image, Text, View } from "react-native";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { fetchData } from "@/hooks/fetchData";
 import FormLogin from "@/components/FormLogin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCurrentUser } from "@/context/UserContext";
 import { UserContext } from "@/context/UserContext";
 
 const login = () => {
@@ -38,7 +37,8 @@ const login = () => {
         await fetchData('/login','POST', body)
             .then(async (result) => {
                 if(result.errors) {
-                    return showMessage({
+                    console.log('ERREUR DE CONNEXION');
+                    showMessage({
                         message: 'Erreur, connexion échouée',
                         type: 'danger',
                         icon: 'danger',
