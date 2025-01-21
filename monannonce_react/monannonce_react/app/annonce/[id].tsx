@@ -13,7 +13,7 @@ const annonce = () => {
   });
 
   useEffect(() => {
-    fetchData('/annonce/'+id, "GET").then((data) => setAnnonce(data));
+    fetchData('/offer/'+id, "GET").then((data) => setAnnonce(data));
   }, [id])
 
   return (

@@ -1,6 +1,8 @@
+import { useCurrentUser, UserContext } from "@/context/UserContext";
+import { fetchData } from "@/hooks/fetchData";
 import { Link } from "expo-router";
-import React from "react";
-import { Image, ScrollView, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { Image, ScrollView, Text, View } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import { Appbar } from "react-native-paper";
 
@@ -8,6 +10,17 @@ const layout = ({ style = {
         flex: 1,
         justifyContent: "start",
     }, children }: { style?: Object; children?: any }) => {
+    
+    const { user, setUser } = useContext(UserContext);
+    console.log('USER DATA LAYOUT', user);
+    
+    useEffect( () => {
+        if(!('id' in user)) {
+            console.log('USER CONDITION SUCCEED');
+            fetchData('/user/me', 'GET').then((user) => setUser(user));
+        }
+    }, [])
+
     return (
         <View
             style={style}
@@ -39,10 +52,12 @@ const layout = ({ style = {
                         padding: 20
                     }}
                 >
+                    <Text>Bienvenue {user.firstname} {user.lastname} !</Text>
+                    <Text>PLOP</Text>
                     {children}
                 </View>
             </ScrollView>
-            <FlashMessage position="top" />
+            <FlashMessage position="bottom" />
         </View>
     );
 }
